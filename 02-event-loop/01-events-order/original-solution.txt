@@ -1,0 +1,10 @@
+James
+Richard
+John
+James // ошибка
+Robert
+James
+Michael
+
+Почему James лишний?
+После выполнения setTimeout, setInterval не будет вызван, т.к. еще не пройдет 10 мс.
