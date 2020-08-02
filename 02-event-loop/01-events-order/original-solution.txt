@@ -1,0 +1,10 @@
+James
+Richard
+John
+James // ошибка
+Robert
+James
+Michael
+
+Почему James лишний?
+После выполнения cb setTimeout, cb setInterval не будет вызван, т.к. приоритет уйдет к миктротаску promise.then
