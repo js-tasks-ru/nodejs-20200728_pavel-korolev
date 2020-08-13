@@ -19,11 +19,9 @@ server.on('request', (req, res) => {
         res.statusCode = 400;
         res.end('Nested directories are not allowed');
       } else {
-        fs
-          .createReadStream(filepath)
-          .on('data', (chunk) => {
-            res.write(chunk);
-          })
+        const reader = fs.createReadStream(filepath);
+
+        reader
           .on('error', (err) => {
             if (err.code === 'ENOENT') {
               res.statusCode = 404;
@@ -32,11 +30,9 @@ server.on('request', (req, res) => {
               res.statusCode = 500;
               res.end('Server error');
             }
-          })
-          .on('end', () => {
-            res.statusCode = 200;
-            res.end('Success');
           });
+
+        reader.pipe(res);
       }
 
       break;
