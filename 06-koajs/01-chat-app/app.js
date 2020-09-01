@@ -13,6 +13,9 @@ let subscriptions = [];
 router.get('/subscribe', async (ctx, next) => {
   const getMessage = () => new Promise((resolve) => {
     subscriptions.push(resolve);
+    ctx.res.on('close', () => {
+      subscriptions.splice(subscriptions.indexOf(resolve), 1);
+    });
   });
   const message = await getMessage();
   ctx.body = message;
