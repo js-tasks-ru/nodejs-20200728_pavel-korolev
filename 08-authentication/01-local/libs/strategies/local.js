@@ -7,18 +7,22 @@ module.exports = new LocalStrategy(
       session: false
     },
     async function(email, password, done) {
-      const user = await User.findOne({ email });
+      try {
+        const user = await User.findOne({ email });
 
-      if (!user) {
-        done(null, false, 'Нет такого пользователя');
+        if (!user) {
+          return done(null, false, 'Нет такого пользователя');
+        }
+
+        const isPasswordValid = await user.checkPassword(password);
+
+        if (!isPasswordValid) {
+          return done(null, false, 'Неверный пароль');
+        }
+
+        return done(null, user);
+      } catch (err) {
+        done(err);
       }
-
-      const isPasswordValid = await user.checkPassword(password);
-
-      if (!isPasswordValid) {
-        done(null, false, 'Неверный пароль');
-      }
-
-      done(null, user);
     },
 );
